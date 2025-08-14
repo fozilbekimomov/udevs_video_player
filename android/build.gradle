@@ -10,7 +10,7 @@ buildscript {
     }
     dependencies {
         // Keep AGP aligned with your root; 8.1.4 is fine here
-        classpath 'com.android.tools.build:gradle:8.1.4'
+        classpath 'com.android.tools.build:gradle:8.6.1'
 
         // Kotlin 2.0.x (required for the Compose Gradle plugin approach)
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.21"
