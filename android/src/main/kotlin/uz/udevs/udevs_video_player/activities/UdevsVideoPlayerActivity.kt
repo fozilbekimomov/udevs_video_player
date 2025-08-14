@@ -1431,7 +1431,7 @@ class UdevsVideoPlayerActivity : AppCompatActivity(), GestureDetector.OnGestureL
                     bottomSheetDialog.dismiss()
                 }
             })
-        TabLayoutMediator(tabLayout!!, viewPager) { tab, position ->
+        TabLayoutMediator(tabLayout!!, viewPager!!) { tab, position ->
             tab.text = playerConfiguration.seasons[position].title
         }.attach()
         bottomSheetDialog.show()
