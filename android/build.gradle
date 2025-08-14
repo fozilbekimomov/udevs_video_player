@@ -1,14 +1,28 @@
 group 'uz.udevs.udevs_video_player'
 version '1.0-SNAPSHOT'
 
-// Compose/Media3 version used in dependencies
-def media3_version = '1.2.1'
+buildscript {
+    ext.media3_version = '1.2.1'
 
-plugins {
-    id 'com.android.library' version '8.1.4'
-    id 'org.jetbrains.kotlin.android' version '2.0.21'
-    id 'org.jetbrains.kotlin.plugin.compose' version '2.0.21'
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        // Keep AGP aligned with your root; 8.1.4 is fine here
+        classpath 'com.android.tools.build:gradle:8.1.4'
+
+        // Kotlin 2.0.x (required for the Compose Gradle plugin approach)
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.21"
+
+        // IMPORTANT: add the Compose Compiler Gradle plugin to the classpath
+        classpath "org.jetbrains.kotlin:compose-compiler-gradle-plugin:2.0.21"
+    }
 }
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'org.jetbrains.kotlin.plugin.compose' // <-- now resolvable
 
 repositories {
     google()
@@ -17,7 +31,7 @@ repositories {
 
 android {
     namespace 'uz.udevs.udevs_video_player'
-    compileSdk 34
+    compileSdkVersion 34
 
     defaultConfig {
         minSdkVersion 21
@@ -27,9 +41,9 @@ android {
     buildFeatures {
         compose true
     }
-    // DO NOT set composeOptions/kotlinCompilerExtensionVersion when using the compose plugin
+    // DO NOT use composeOptions/kotlinCompilerExtensionVersion with the compose plugin
 
-    // Use Java 17 with Kotlin 2.x / AGP 8.x
+    // Java 17 toolchain for Kotlin 2.x / AGP 8.x
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
@@ -40,11 +54,10 @@ android {
 
     sourceSets {
         main {
-            res {
-                srcDirs 'src\\main\\res'
-            }
+            // Use POSIX path to avoid issues on macOS/Linux
+            res.srcDirs = ['src/main/res']
+            java.srcDirs += 'src/main/kotlin'
         }
-        main.java.srcDirs += 'src/main/kotlin'
     }
 
     // (Deprecated but harmless if you need it)
