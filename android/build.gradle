@@ -8,10 +8,10 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        // AGP can stay if your root uses 8.1.4; upgrade later at the root if needed.
+        // Keep AGP aligned with your root; upgrade at root later if needed
         classpath 'com.android.tools.build:gradle:8.1.4'
 
-        // IMPORTANT: Kotlin 2.0.x to enable the Compose Gradle plugin
+        // Kotlin 2.0.x to enable the Compose Gradle plugin
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.21"
     }
 }
@@ -25,9 +25,7 @@ allprojects {
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-
-// NEW: Compose Compiler Gradle plugin (works with Kotlin 2.0.x)
-apply plugin: 'org.jetbrains.kotlin.plugin.compose'
+apply plugin: 'org.jetbrains.kotlin.plugin.compose' // <-- Compose compiler plugin
 
 android {
     namespace 'uz.udevs.udevs_video_player'
@@ -37,10 +35,9 @@ android {
         compose true
     }
 
-    // REMOVE legacy composeOptions block; the plugin handles compiler matching:
-    // composeOptions { kotlinCompilerExtensionVersion "1.5.2" }
+    // No composeOptions block when using the compose plugin
 
-    // Use Java 17 toolchain with Kotlin 2.x / modern AGP
+    // Java 17 toolchain for Kotlin 2.x / modern AGP
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
@@ -58,7 +55,7 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
 
-    // aaptOptions is deprecated; keep only if you really need it
+    // aaptOptions is deprecated; keep only if you need it
     aaptOptions {
         noCompress 'mp4'
     }
@@ -93,7 +90,7 @@ dependencies {
     implementation 'org.checkerframework:checker-qual:3.33.0'
     implementation 'com.google.android.gms:play-services-cronet:18.0.1'
 
-    // Compose BOM keeps runtime libs aligned; keep your existing one or bump later
+    // Compose BOM keeps runtime libs aligned
     def composeBom = platform('androidx.compose:compose-bom:2024.06.00')
     implementation composeBom
     androidTestImplementation composeBom
